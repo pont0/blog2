@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Identity;
 
-namespace PWABlog.Models.ControledeAcesso
+namespace PWABlog.Models.ControleDeAcesso
 {
     public class Usuario : IdentityUser<int>
-
     {
         public string Apelido { get; set; }
-
-
     }
 }

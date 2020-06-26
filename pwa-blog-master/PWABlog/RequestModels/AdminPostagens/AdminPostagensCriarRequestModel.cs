@@ -2,10 +2,11 @@
 {
     public class AdminPostagensCriarRequestModel
     {
-        public string Nome { get; set; }
         public string Titulo { get; set; }
         public string Descricao { get; set; }
-        public AutorEntity Autor { get; set; }
-        public CategoriaEntity Categoria { get; set; }
+        public int IdAutor { get; set; }
+        public int IdCategoria { get; set; }
+        public string Texto { get; set; }
+        public string DataExibicao { get; set; }
     }
 }

@@ -1,25 +1,22 @@
 ﻿using PWABlog.Models.Blog.Autor;
 using PWABlog.Models.Blog.Categoria;
-using System.Collections.Generic;
-using PWABlog.Models.Blog.Postagem.Revisao;
-using System.ComponentModel.DataAnnotations;
 using PWABlog.Models.Blog.Postagem.Classificacao;
 using PWABlog.Models.Blog.Postagem.Comentario;
+using PWABlog.Models.Blog.Postagem.Revisao;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace PWABlog.Models.Blog.Postagem
 {
     public class PostagemEntity
     {
-        [Key] 
-        public int Id { get; set; }
+        [Key] public int Id { get; set; }
 
-        [MaxLength(128)] 
-        [Required] 
-        public string Titulo { get; set; }
-        
-        [MaxLength(640)]
-        [Required]
-        public string Descricao { get; set; }
+        [MaxLength(128)] [Required] public string Titulo { get; set; }
+
+        [MaxLength(640)] [Required] public string Descricao { get; set; }
 
         public AutorEntity Autor { get; set; }
 
@@ -33,6 +30,7 @@ namespace PWABlog.Models.Blog.Postagem
 
         public ICollection<ClassificacaoEntity> Classificacoes { get; set; }
 
+        public DateTime DataExibicao { get; set; }
 
         public PostagemEntity()
         {
@@ -40,6 +38,11 @@ namespace PWABlog.Models.Blog.Postagem
             Revisoes = new List<RevisaoEntity>();
             Comentarios = new List<ComentarioEntity>();
             Classificacoes = new List<ClassificacaoEntity>();
+        }
+
+        public RevisaoEntity ObterUltimaRevisao()
+        {
+            return Revisoes.OrderByDescending(r => r.Versao).FirstOrDefault();
         }
     }
 }

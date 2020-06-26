@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PWABlog.Models.Blog.Categoria;
 using PWABlog.RequestModels.AdminCategorias;
+using PWABlog.ViewModels.Admin;
+using System;
 
 namespace PWABlog.Controllers.Admin
 {
+    [Authorize]
     public class AdminCategoriasController : Controller
     {
         private readonly CategoriaOrmService _categoriaOrmService;
@@ -22,11 +22,27 @@ namespace PWABlog.Controllers.Admin
         [HttpGet]
         public IActionResult Listar()
         {
-            return View();
+            AdminCategoriasListarViewModel model = new AdminCategoriasListarViewModel();
+
+            // Obter as Categorias
+            var listaCategorias = _categoriaOrmService.ObterCategorias();
+
+            // Alimentar o model com as Categorias que serão listadas
+            foreach (var categoriaEntity in listaCategorias)
+            {
+                var CategoriaAdminCategorias = new CategoriaAdminCategorias();
+                CategoriaAdminCategorias.Id = categoriaEntity.Id;
+                CategoriaAdminCategorias.Nome = categoriaEntity.Nome;
+               
+
+                model.Categorias.Add(CategoriaAdminCategorias);
+            }
+
+            return View(model);
         }
 
         [HttpGet]
-        public IActionResult Detalhar()
+        public IActionResult Detalhar(int id)
         {
             return View();
         }
@@ -35,7 +51,7 @@ namespace PWABlog.Controllers.Admin
         public IActionResult Criar()
         {
             ViewBag.erro = TempData["erro-msg"];
-            
+
             return View();
         }
 
@@ -44,9 +60,12 @@ namespace PWABlog.Controllers.Admin
         {
             var nome = request.Nome;
 
-            try {
+            try
+            {
                 _categoriaOrmService.CriarCategoria(nome);
-            } catch (Exception exception) {
+            }
+            catch (Exception exception)
+            {
                 TempData["erro-msg"] = exception.Message;
                 return RedirectToAction("Criar");
             }
@@ -57,10 +76,29 @@ namespace PWABlog.Controllers.Admin
         [HttpGet]
         public IActionResult Editar(int id)
         {
+           
+            
+            
             ViewBag.id = id;
             ViewBag.erro = TempData["erro-msg"];
 
-            return View();
+            AdminCategoriasEditarViewModel model = new AdminCategoriasEditarViewModel();
+
+            // Obter as Categorias
+            var listaCategorias = _categoriaOrmService.ObterCategorias();
+
+            // Alimentar o model com as Categorias que serão listadas
+            foreach (var categoriaEntity in listaCategorias)
+            {
+                var CategoriaAdminCategorias = new CategoriaAdminCategorias();
+                CategoriaAdminCategorias.Id = categoriaEntity.Id;
+                CategoriaAdminCategorias.Nome = categoriaEntity.Nome;
+
+
+                model.Categorias.Add(CategoriaAdminCategorias);
+            }
+
+            return View(model);
         }
 
         [HttpPost]
@@ -69,11 +107,14 @@ namespace PWABlog.Controllers.Admin
             var id = request.Id;
             var nome = request.Nome;
 
-            try {
+            try
+            {
                 _categoriaOrmService.EditarCategoria(id, nome);
-            } catch (Exception exception) {
+            }
+            catch (Exception exception)
+            {
                 TempData["erro-msg"] = exception.Message;
-                return RedirectToAction("Editar", new {id = id});
+                return RedirectToAction("Editar", new { id = id });
             }
 
             return RedirectToAction("Listar");
@@ -93,11 +134,14 @@ namespace PWABlog.Controllers.Admin
         {
             var id = request.Id;
 
-            try {
+            try
+            {
                 _categoriaOrmService.RemoverCategoria(id);
-            } catch (Exception exception) {
+            }
+            catch (Exception exception)
+            {
                 TempData["erro-msg"] = exception.Message;
-                return RedirectToAction("Remover", new {id = id});
+                return RedirectToAction("Remover", new { id = id });
             }
 
             return RedirectToAction("Listar");

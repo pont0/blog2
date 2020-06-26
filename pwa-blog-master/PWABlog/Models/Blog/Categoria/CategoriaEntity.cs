@@ -1,8 +1,7 @@
-﻿using System.Collections;
+﻿using PWABlog.Models.Blog.Etiqueta;
+using PWABlog.Models.Blog.Postagem;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using PWABlog.Models.Blog.Etiqueta;
-using PWABlog.Models.Blog.Postagem;
 
 namespace PWABlog.Models.Blog.Categoria
 {

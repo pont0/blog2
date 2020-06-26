@@ -1,5 +1,3 @@
-using System;
-
 namespace PWABlog.Models
 {
     public class ErrorViewModel
